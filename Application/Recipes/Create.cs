@@ -22,6 +22,10 @@ namespace Application.Recipes
             public string Url { get; set; }
 
             public string Notes { get; set; }
+
+            public string PrepTime { get; set; }
+
+            public string CookTime { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -41,7 +45,9 @@ namespace Application.Recipes
                     Description = request.Description,
                     Source = request.Source,
                     Url = request.Url,
-                    Notes = request.Notes
+                    Notes = request.Notes,
+                    PrepTime = request.PrepTime,
+                    CookTime = request.CookTime
                 };
 
                 _context.Recipes.Add(recipe);

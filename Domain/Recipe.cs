@@ -1,7 +1,9 @@
 using System;
 
-namespace Domain {
-    public class Recipe {
+namespace Domain
+{
+    public class Recipe
+    {
         public Guid Id { get; set; }
 
         public string Title { get; set; }
@@ -13,5 +15,9 @@ namespace Domain {
         public string Url { get; set; }
 
         public string Notes { get; set; }
+
+        public string PrepTime { get; set; }
+
+        public string CookTime { get; set; }
     }
 }

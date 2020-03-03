@@ -21,6 +21,10 @@ namespace Application.Recipes
             public string Url { get; set; }
 
             public string Notes { get; set; }
+
+            public string PrepTime { get; set; }
+
+            public string CookTime { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -42,6 +46,8 @@ namespace Application.Recipes
                 recipe.Source = request.Source ?? recipe.Source;
                 recipe.Url = request.Url ?? recipe.Url;
                 recipe.Notes = request.Notes ?? recipe.Notes;
+                recipe.PrepTime = request.PrepTime ?? recipe.PrepTime;
+                recipe.PrepTime = request.PrepTime ?? recipe.CookTime;
 
                 var success = await _context.SaveChangesAsync() > 0;
 
