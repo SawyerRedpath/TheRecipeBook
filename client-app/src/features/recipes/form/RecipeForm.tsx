@@ -8,13 +8,15 @@ interface IProps {
   recipe: IRecipe;
   createRecipe: (recipe: IRecipe) => void;
   editRecipe: (recipe: IRecipe) => void;
+  submitting: boolean;
 }
 
 export const RecipeForm: React.FC<IProps> = ({
   setEditMode,
   recipe: initialFormState,
   createRecipe,
-  editRecipe
+  editRecipe,
+  submitting
 }) => {
   const initializeForm = () => {
     if (initialFormState) {
@@ -100,7 +102,13 @@ export const RecipeForm: React.FC<IProps> = ({
             placeholder="Cook time"
             value={recipe.cookTime}
           />
-          <Button floated="right" positive type="submit" content="Submit" />
+          <Button
+            loading={submitting}
+            floated="right"
+            positive
+            type="submit"
+            content="Submit"
+          />
           <Button
             onClick={() => setEditMode(false)}
             floated="right"

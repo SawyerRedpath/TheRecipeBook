@@ -1,17 +1,21 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Item, Button, Label, Segment, Icon } from "semantic-ui-react";
 import { IRecipe } from "../../../app/models/recipe";
 
 interface IProps {
   recipes: IRecipe[];
   selectRecipe: (id: string) => void;
-  deleteRecipe: (id: string) => void;
+  deleteRecipe: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
+  submitting: boolean;
+  target: string;
 }
 
 export const RecipeList: React.FC<IProps> = ({
   recipes,
   selectRecipe,
-  deleteRecipe
+  deleteRecipe,
+  submitting,
+  target
 }) => {
   return (
     <Segment clearing>
@@ -34,7 +38,9 @@ export const RecipeList: React.FC<IProps> = ({
                   color="blue"
                 />
                 <Button
-                  onClick={() => deleteRecipe(recipe.id)}
+                  name={recipe.id}
+                  loading={target === recipe.id && submitting}
+                  onClick={e => deleteRecipe(e, recipe.id)}
                   floated="right"
                   content="Delete"
                   color="red"

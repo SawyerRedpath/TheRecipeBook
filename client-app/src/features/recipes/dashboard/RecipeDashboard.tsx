@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Grid } from "semantic-ui-react";
 import { IRecipe } from "../../../app/models/recipe";
 import RecipeList from "../dashboard/RecipeList";
@@ -14,7 +14,9 @@ interface IProps {
   setSelectedRecipe: (recipe: IRecipe | null) => void;
   createRecipe: (recipe: IRecipe) => void;
   editRecipe: (recipe: IRecipe) => void;
-  deleteRecipe: (id: string) => void;
+  deleteRecipe: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
+  submitting: boolean;
+  target: string;
 }
 
 export const RecipeDashboard: React.FC<IProps> = ({
@@ -26,7 +28,9 @@ export const RecipeDashboard: React.FC<IProps> = ({
   setSelectedRecipe,
   createRecipe,
   editRecipe,
-  deleteRecipe
+  deleteRecipe,
+  submitting,
+  target
 }) => {
   return (
     <Grid>
@@ -35,6 +39,8 @@ export const RecipeDashboard: React.FC<IProps> = ({
           recipes={recipes}
           selectRecipe={selectRecipe}
           deleteRecipe={deleteRecipe}
+          submitting={submitting}
+          target={target}
         />
       </Grid.Column>
       <Grid.Column width={6}>
@@ -52,6 +58,7 @@ export const RecipeDashboard: React.FC<IProps> = ({
             recipe={selectedRecipe!}
             createRecipe={createRecipe}
             editRecipe={editRecipe}
+            submitting={submitting}
           />
         )}
       </Grid.Column>
