@@ -1,0 +1,114 @@
+import React, { useState, FormEvent } from "react";
+import { Segment, Form, Button } from "semantic-ui-react";
+import { IRecipe } from "../../../app/models/recipe";
+import { v4 as uuid } from "uuid";
+
+interface IProps {
+  setEditMode: (editMode: boolean) => void;
+  recipe: IRecipe;
+  createRecipe: (recipe: IRecipe) => void;
+  editRecipe: (recipe: IRecipe) => void;
+}
+
+export const RecipeForm: React.FC<IProps> = ({
+  setEditMode,
+  recipe: initialFormState,
+  createRecipe,
+  editRecipe
+}) => {
+  const initializeForm = () => {
+    if (initialFormState) {
+      return initialFormState;
+    } else {
+      return {
+        id: "",
+        title: "",
+        description: "",
+        source: "",
+        url: "",
+        notes: "",
+        prepTime: "",
+        cookTime: ""
+      };
+    }
+  };
+
+  const [recipe, setRecipe] = useState<IRecipe>(initializeForm);
+
+  const handleInputChange = (
+    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.currentTarget;
+    setRecipe({ ...recipe, [name]: value });
+  };
+
+  const handleSubmit = () => {
+    if (recipe.id.length === 0) {
+      let newRecipe = {
+        ...recipe,
+        id: uuid()
+      };
+      createRecipe(newRecipe);
+    } else {
+      editRecipe(recipe);
+    }
+  };
+
+  return (
+    <>
+      <Segment clearing>
+        <Form onSubmit={handleSubmit}>
+          <Form.Input
+            onChange={handleInputChange}
+            name="title"
+            placeholder="Title"
+            value={recipe.title}
+          />
+          <Form.TextArea
+            onChange={handleInputChange}
+            name="description"
+            placeholder="Description"
+            value={recipe.description}
+          />
+          <Form.Input
+            onChange={handleInputChange}
+            name="source"
+            placeholder="Source"
+            value={recipe.source}
+          />
+          <Form.Input
+            onChange={handleInputChange}
+            name="url"
+            placeholder="URL"
+            value={recipe.url}
+          />
+          <Form.TextArea
+            onChange={handleInputChange}
+            name="notes"
+            placeholder="Notes"
+            value={recipe.notes}
+          />
+          <Form.Input
+            onChange={handleInputChange}
+            name="prepTime"
+            placeholder="Prep time"
+            value={recipe.prepTime}
+          />
+          <Form.Input
+            onChange={handleInputChange}
+            name="cookTime"
+            placeholder="Cook time"
+            value={recipe.cookTime}
+          />
+          <Button floated="right" positive type="submit" content="Submit" />
+          <Button
+            onClick={() => setEditMode(false)}
+            floated="right"
+            type="button"
+            content="Cancel"
+          />
+        </Form>
+      </Segment>
+    </>
+  );
+};
