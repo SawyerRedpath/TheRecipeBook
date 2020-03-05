@@ -1,23 +1,17 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useContext } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { IRecipe } from "../../../app/models/recipe";
 import { v4 as uuid } from "uuid";
+import RecipeStore from "../../../app/stores/recipeStore";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
-  setEditMode: (editMode: boolean) => void;
   recipe: IRecipe;
-  createRecipe: (recipe: IRecipe) => void;
-  editRecipe: (recipe: IRecipe) => void;
-  submitting: boolean;
 }
 
-export const RecipeForm: React.FC<IProps> = ({
-  setEditMode,
-  recipe: initialFormState,
-  createRecipe,
-  editRecipe,
-  submitting
-}) => {
+const RecipeForm: React.FC<IProps> = ({ recipe: initialFormState }) => {
+  const recipeStore = useContext(RecipeStore);
+  const { createRecipe, editRecipe, submitting, cancelFormOpen } = recipeStore;
   const initializeForm = () => {
     if (initialFormState) {
       return initialFormState;
@@ -110,7 +104,7 @@ export const RecipeForm: React.FC<IProps> = ({
             content="Submit"
           />
           <Button
-            onClick={() => setEditMode(false)}
+            onClick={cancelFormOpen}
             floated="right"
             type="button"
             content="Cancel"
@@ -120,3 +114,5 @@ export const RecipeForm: React.FC<IProps> = ({
     </>
   );
 };
+
+export default observer(RecipeForm);

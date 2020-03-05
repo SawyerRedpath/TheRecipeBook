@@ -1,26 +1,21 @@
-import React, { SyntheticEvent } from "react";
+import React, { useContext } from "react";
 import { Item, Button, Label, Segment, Icon } from "semantic-ui-react";
-import { IRecipe } from "../../../app/models/recipe";
+import { observer } from "mobx-react-lite";
+import RecipeStore from "../../../app/stores/recipeStore";
 
-interface IProps {
-  recipes: IRecipe[];
-  selectRecipe: (id: string) => void;
-  deleteRecipe: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
-
-export const RecipeList: React.FC<IProps> = ({
-  recipes,
-  selectRecipe,
-  deleteRecipe,
-  submitting,
-  target
-}) => {
+const RecipeList: React.FC = () => {
+  const recipeStore = useContext(RecipeStore);
+  const {
+    recipesByTitle,
+    selectRecipe,
+    deleteRecipe,
+    submitting,
+    target
+  } = recipeStore;
   return (
     <Segment clearing>
       <Item.Group divided>
-        {recipes.map(recipe => (
+        {recipesByTitle.map(recipe => (
           <Item key={recipe.id}>
             <Item.Content>
               <Item.Header as="a">{recipe.title}</Item.Header>
@@ -60,4 +55,4 @@ export const RecipeList: React.FC<IProps> = ({
   );
 };
 
-export default RecipeList;
+export default observer(RecipeList);

@@ -1,42 +1,39 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Card, Image, Button } from "semantic-ui-react";
-import { IRecipe } from "../../../app/models/recipe";
+import RecipeStore from "../../../app/stores/recipeStore";
+import { observer } from "mobx-react-lite";
 
-interface IProps {
-  recipe: IRecipe;
-  setEditMode: (editMode: boolean) => void;
-  setSelectedRecipe: (recipe: IRecipe | null) => void;
-}
-
-export const RecipeDetails: React.FC<IProps> = ({
-  recipe,
-  setEditMode,
-  setSelectedRecipe
-}) => {
+const RecipeDetails: React.FC = () => {
+  const recipeStore = useContext(RecipeStore);
+  const {
+    selectedRecipe: recipe,
+    openEditForm,
+    cancelSelectedRecipe
+  } = recipeStore;
   return (
     <Card fluid>
       <Image src="/assets/placeholder.png" wrapped ui={false} />
       <Card.Content>
-        <Card.Header>{recipe.title}</Card.Header>
+        <Card.Header>{recipe!.title}</Card.Header>
         <Card.Meta>
-          <span>{recipe.source}</span>
-          <span>{recipe.url}</span>
+          <span>{recipe!.source}</span>
+          <span>{recipe!.url}</span>
         </Card.Meta>
         <Card.Description>
-          <div>{recipe.description}</div>
-          <div>{recipe.notes}</div>
+          <div>{recipe!.description}</div>
+          <div>{recipe!.notes}</div>
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
         <Button.Group widths={2}>
           <Button
-            onClick={() => setEditMode(true)}
+            onClick={() => openEditForm(recipe!.id)}
             basic
             color="blue"
             content="Edit"
           />
           <Button
-            onClick={() => setSelectedRecipe(null)}
+            onClick={cancelSelectedRecipe}
             basic
             color="grey"
             content="Cancel"
@@ -46,3 +43,5 @@ export const RecipeDetails: React.FC<IProps> = ({
     </Card>
   );
 };
+
+export default observer(RecipeDetails);
