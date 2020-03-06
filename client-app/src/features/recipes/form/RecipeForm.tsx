@@ -1,35 +1,57 @@
-import React, { useState, FormEvent, useContext } from "react";
+import React, { useState, FormEvent, useContext, useEffect } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { IRecipe } from "../../../app/models/recipe";
 import { v4 as uuid } from "uuid";
 import RecipeStore from "../../../app/stores/recipeStore";
 import { observer } from "mobx-react-lite";
+import { RouteComponentProps } from "react-router-dom";
 
-interface IProps {
-  recipe: IRecipe;
+interface DetailParams {
+  id: string;
 }
 
-const RecipeForm: React.FC<IProps> = ({ recipe: initialFormState }) => {
+const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
+  match,
+  history
+}) => {
   const recipeStore = useContext(RecipeStore);
-  const { createRecipe, editRecipe, submitting, cancelFormOpen } = recipeStore;
-  const initializeForm = () => {
-    if (initialFormState) {
-      return initialFormState;
-    } else {
-      return {
-        id: "",
-        title: "",
-        description: "",
-        source: "",
-        url: "",
-        notes: "",
-        prepTime: "",
-        cookTime: ""
-      };
-    }
-  };
+  const {
+    createRecipe,
+    editRecipe,
+    submitting,
+    recipe: initialFormState,
+    loadRecipe,
+    clearRecipe
+  } = recipeStore;
 
-  const [recipe, setRecipe] = useState<IRecipe>(initializeForm);
+  const [recipe, setRecipe] = useState<IRecipe>({
+    id: "",
+    title: "",
+    description: "",
+    source: "",
+    url: "",
+    notes: "",
+    prepTime: "",
+    cookTime: ""
+  });
+
+  useEffect(() => {
+    if (match.params.id && recipe.id.length === 0) {
+      loadRecipe(match.params.id).then(
+        () => initialFormState && setRecipe(initialFormState)
+      );
+    }
+    // Clean up (component unmount)
+    return () => {
+      clearRecipe();
+    };
+  }, [
+    loadRecipe,
+    clearRecipe,
+    match.params.id,
+    initialFormState,
+    recipe.id.length
+  ]);
 
   const handleInputChange = (
     event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -44,9 +66,11 @@ const RecipeForm: React.FC<IProps> = ({ recipe: initialFormState }) => {
         ...recipe,
         id: uuid()
       };
-      createRecipe(newRecipe);
+      createRecipe(newRecipe).then(() =>
+        history.push(`/recipes/${newRecipe.id}`)
+      );
     } else {
-      editRecipe(recipe);
+      editRecipe(recipe).then(() => history.push(`/recipes/${recipe.id}`));
     }
   };
 
@@ -104,7 +128,7 @@ const RecipeForm: React.FC<IProps> = ({ recipe: initialFormState }) => {
             content="Submit"
           />
           <Button
-            onClick={cancelFormOpen}
+            onClick={() => history.push("/recipes")}
             floated="right"
             type="button"
             content="Cancel"

@@ -1,27 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
 import RecipeList from "../dashboard/RecipeList";
-import RecipeDetails from "../details/RecipeDetails";
-import RecipeForm from "../form/RecipeForm";
 import { observer } from "mobx-react-lite";
 import RecipeStore from "../../../app/stores/recipeStore";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 const RecipeDashboard: React.FC = () => {
   const recipeStore = useContext(RecipeStore);
-  const { editMode, selectedRecipe } = recipeStore;
+
+  useEffect(() => {
+    recipeStore.loadRecipes();
+  }, [recipeStore]);
+
+  if (recipeStore.loadingInitial)
+    return <LoadingComponent content="Loading recipes.." />;
   return (
     <Grid>
       <Grid.Column width={10}>
         <RecipeList />
       </Grid.Column>
       <Grid.Column width={6}>
-        {selectedRecipe && !editMode && <RecipeDetails />}
-        {editMode && (
-          <RecipeForm
-            key={(selectedRecipe && selectedRecipe.id) || 0}
-            recipe={selectedRecipe!}
-          />
-        )}
+        <h2>Recipe Filters</h2>
       </Grid.Column>
     </Grid>
   );

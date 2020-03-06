@@ -7,10 +7,8 @@ configure({ enforceActions: "always" });
 
 class RecipeStore {
   @observable recipeRegistry = new Map();
-  @observable recipes: IRecipe[] = [];
-  @observable selectedRecipe: IRecipe | undefined;
+  @observable recipe: IRecipe | null = null;
   @observable loadingInitial = false;
-  @observable editMode = false;
   @observable submitting = false;
   @observable target = "";
 
@@ -40,13 +38,41 @@ class RecipeStore {
     }
   };
 
+  @action loadRecipe = async (id: string) => {
+    let recipe = this.getRecipe(id);
+    if (recipe) {
+      this.recipe = recipe;
+    } else {
+      this.loadingInitial = true;
+      try {
+        recipe = await agent.Recipes.details(id);
+        runInAction("getting Recipe", () => {
+          this.recipe = recipe;
+          this.loadingInitial = false;
+        });
+      } catch (error) {
+        runInAction("get recipe error", () => {
+          this.loadingInitial = false;
+        });
+        console.log(error);
+      }
+    }
+  };
+
+  @action clearRecipe = () => {
+    this.recipe = null;
+  };
+
+  getRecipe = (id: string) => {
+    return this.recipeRegistry.get(id);
+  };
+
   @action createRecipe = async (recipe: IRecipe) => {
     this.submitting = true;
     try {
       await agent.Recipes.create(recipe);
       runInAction("creating recipe", () => {
         this.recipeRegistry.set(recipe.id, recipe);
-        this.editMode = false;
         this.submitting = false;
       });
     } catch (error) {
@@ -63,8 +89,7 @@ class RecipeStore {
       await agent.Recipes.update(recipe);
       runInAction("editing recipe", () => {
         this.recipeRegistry.set(recipe.id, recipe);
-        this.selectedRecipe = recipe;
-        this.editMode = false;
+        this.recipe = recipe;
         this.submitting = false;
       });
     } catch (error) {
@@ -97,29 +122,6 @@ class RecipeStore {
 
       console.log(error);
     }
-  };
-
-  @action openCreateForm = () => {
-    this.editMode = true;
-    this.selectedRecipe = undefined;
-  };
-
-  @action openEditForm = (id: string) => {
-    this.selectedRecipe = this.recipeRegistry.get(id);
-    this.editMode = true;
-  };
-
-  @action cancelSelectedRecipe = () => {
-    this.selectedRecipe = undefined;
-  };
-
-  @action selectRecipe = (id: string) => {
-    this.selectedRecipe = this.recipeRegistry.get(id);
-    this.editMode = false;
-  };
-
-  @action cancelFormOpen = () => {
-    this.editMode = false;
   };
 }
 

@@ -2,16 +2,11 @@ import React, { useContext } from "react";
 import { Item, Button, Label, Segment, Icon } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import RecipeStore from "../../../app/stores/recipeStore";
+import { Link } from "react-router-dom";
 
 const RecipeList: React.FC = () => {
   const recipeStore = useContext(RecipeStore);
-  const {
-    recipesByTitle,
-    selectRecipe,
-    deleteRecipe,
-    submitting,
-    target
-  } = recipeStore;
+  const { recipesByTitle, deleteRecipe, submitting, target } = recipeStore;
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -27,7 +22,8 @@ const RecipeList: React.FC = () => {
               </Item.Description>
               <Item.Extra>
                 <Button
-                  onClick={() => selectRecipe(recipe.id)}
+                  as={Link}
+                  to={`/recipes/${recipe.id}`}
                   floated="right"
                   content="View"
                   color="blue"

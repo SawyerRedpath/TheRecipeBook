@@ -1,15 +1,28 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Card, Image, Button } from "semantic-ui-react";
 import RecipeStore from "../../../app/stores/recipeStore";
 import { observer } from "mobx-react-lite";
+import { RouteComponentProps, Link } from "react-router-dom";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-const RecipeDetails: React.FC = () => {
+interface DetailParams {
+  id: string;
+}
+
+const RecipeDetails: React.FC<RouteComponentProps<DetailParams>> = ({
+  match,
+  history
+}) => {
   const recipeStore = useContext(RecipeStore);
-  const {
-    selectedRecipe: recipe,
-    openEditForm,
-    cancelSelectedRecipe
-  } = recipeStore;
+  const { recipe, loadRecipe, loadingInitial } = recipeStore;
+
+  useEffect(() => {
+    loadRecipe(match.params.id);
+  }, [loadRecipe, match.params.id]);
+
+  if (loadingInitial || !recipe)
+    return <LoadingComponent content="Loading recipe" />;
+
   return (
     <Card fluid>
       <Image src="/assets/placeholder.png" wrapped ui={false} />
@@ -27,13 +40,14 @@ const RecipeDetails: React.FC = () => {
       <Card.Content extra>
         <Button.Group widths={2}>
           <Button
-            onClick={() => openEditForm(recipe!.id)}
+            as={Link}
+            to={`/manage/${recipe.id}`}
             basic
             color="blue"
             content="Edit"
           />
           <Button
-            onClick={cancelSelectedRecipe}
+            onClick={() => history.push("/recipes")}
             basic
             color="grey"
             content="Cancel"
