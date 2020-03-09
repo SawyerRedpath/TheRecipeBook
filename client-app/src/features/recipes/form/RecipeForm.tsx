@@ -1,5 +1,5 @@
 import React, { useState, FormEvent, useContext, useEffect } from "react";
-import { Segment, Form, Button } from "semantic-ui-react";
+import { Segment, Form, Button, Grid } from "semantic-ui-react";
 import { IRecipe } from "../../../app/models/recipe";
 import { v4 as uuid } from "uuid";
 import RecipeStore from "../../../app/stores/recipeStore";
@@ -75,67 +75,69 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
   };
 
   return (
-    <>
-      <Segment clearing>
-        <Form onSubmit={handleSubmit}>
-          <Form.Input
-            onChange={handleInputChange}
-            name="title"
-            placeholder="Title"
-            value={recipe.title}
-          />
-          <Form.TextArea
-            onChange={handleInputChange}
-            name="description"
-            placeholder="Description"
-            value={recipe.description}
-          />
-          <Form.Input
-            onChange={handleInputChange}
-            name="source"
-            placeholder="Source"
-            value={recipe.source}
-          />
-          <Form.Input
-            onChange={handleInputChange}
-            name="url"
-            placeholder="URL"
-            value={recipe.url}
-          />
-          <Form.TextArea
-            onChange={handleInputChange}
-            name="notes"
-            placeholder="Notes"
-            value={recipe.notes}
-          />
-          <Form.Input
-            onChange={handleInputChange}
-            name="prepTime"
-            placeholder="Prep time"
-            value={recipe.prepTime}
-          />
-          <Form.Input
-            onChange={handleInputChange}
-            name="cookTime"
-            placeholder="Cook time"
-            value={recipe.cookTime}
-          />
-          <Button
-            loading={submitting}
-            floated="right"
-            positive
-            type="submit"
-            content="Submit"
-          />
-          <Button
-            onClick={() => history.push("/recipes")}
-            floated="right"
-            type="button"
-            content="Cancel"
-          />
-        </Form>
-      </Segment>
-    </>
+    <Grid>
+      <Grid.Column width={10}>
+        <Segment clearing>
+          <Form onSubmit={handleSubmit}>
+            <Form.Input
+              onChange={handleInputChange}
+              name="title"
+              placeholder="Title"
+              value={recipe.title}
+            />
+            <Form.TextArea
+              onChange={handleInputChange}
+              name="description"
+              placeholder="Description"
+              value={recipe.description}
+            />
+            <Form.Input
+              onChange={handleInputChange}
+              name="source"
+              placeholder="Source"
+              value={recipe.source}
+            />
+            <Form.Input
+              onChange={handleInputChange}
+              name="url"
+              placeholder="URL"
+              value={recipe.url}
+            />
+            <Form.TextArea
+              onChange={handleInputChange}
+              name="notes"
+              placeholder="Notes"
+              value={recipe.notes}
+            />
+            <Form.Input
+              onChange={handleInputChange}
+              name="prepTime"
+              placeholder="Prep time"
+              value={recipe.prepTime}
+            />
+            <Form.Input
+              onChange={handleInputChange}
+              name="cookTime"
+              placeholder="Cook time"
+              value={recipe.cookTime}
+            />
+            <Button
+              loading={submitting}
+              floated="right"
+              positive
+              type="submit"
+              content="Submit"
+            />
+            <Button
+              onClick={() => history.push("/recipes")}
+              floated="right"
+              type="button"
+              content="Cancel"
+            />
+          </Form>
+        </Segment>
+      </Grid.Column>
+    </Grid>
   );
 };
 
