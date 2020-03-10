@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -26,6 +27,20 @@ namespace Application.Recipes
             public string PrepTime { get; set; }
 
             public string CookTime { get; set; }
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.Source).NotEmpty();
+                RuleFor(x => x.Url).NotEmpty();
+                RuleFor(x => x.Notes).NotEmpty();
+                RuleFor(x => x.PrepTime).NotEmpty();
+                RuleFor(x => x.CookTime).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Command>

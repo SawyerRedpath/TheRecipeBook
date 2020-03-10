@@ -22,10 +22,11 @@ const RecipeDetails: React.FC<RouteComponentProps<DetailParams>> = ({
 
   useEffect(() => {
     loadRecipe(match.params.id);
-  }, [loadRecipe, match.params.id]);
+  }, [loadRecipe, match.params.id, history]);
 
-  if (loadingInitial || !recipe)
-    return <LoadingComponent content="Loading recipe" />;
+  if (loadingInitial) return <LoadingComponent content="Loading recipe" />;
+
+  if (!recipe) return <h2>Recipe not found</h2>;
 
   return (
     <Grid>
@@ -39,38 +40,6 @@ const RecipeDetails: React.FC<RouteComponentProps<DetailParams>> = ({
       </Grid.Column>
     </Grid>
   );
-
-  //   <Card fluid>
-  //   <Image src="/assets/placeholder.png" wrapped ui={false} />
-  //   <Card.Content>
-  //     <Card.Header>{recipe!.title}</Card.Header>
-  //     <Card.Meta>
-  //       <span>{recipe!.source}</span>
-  //       <span>{recipe!.url}</span>
-  //     </Card.Meta>
-  //     <Card.Description>
-  //       <div>{recipe!.description}</div>
-  //       <div>{recipe!.notes}</div>
-  //     </Card.Description>
-  //   </Card.Content>
-  //   <Card.Content extra>
-  //     <Button.Group widths={2}>
-  //       <Button
-  //         as={Link}
-  //         to={`/manage/${recipe.id}`}
-  //         basic
-  //         color="blue"
-  //         content="Edit"
-  //       />
-  //       <Button
-  //         onClick={() => history.push("/recipes")}
-  //         basic
-  //         color="grey"
-  //         content="Cancel"
-  //       />
-  //     </Button.Group>
-  //   </Card.Content>
-  // </Card>
 };
 
 export default observer(RecipeDetails);

@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -25,7 +27,7 @@ namespace Application.Recipes
             {
                 var recipe = await _context.Recipes.FindAsync(request.Id);
 
-                if (recipe == null) throw new Exception("Could not find recipe");
+                if (recipe == null) throw new RestException(HttpStatusCode.NotFound, new { Recipe = "Not found" });
 
                 _context.Recipes.Remove(recipe);
 

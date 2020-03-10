@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Domain;
 using MediatR;
 using Persistence;
@@ -24,9 +26,11 @@ namespace Application.Recipes
 
             public async Task<Recipe> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Recipes.FindAsync(request.Id);
+                var recipe = await _context.Recipes.FindAsync(request.Id);
 
-                return activity;
+                if (recipe == null) throw new RestException(HttpStatusCode.NotFound, new { Recipe = "Not found" });
+
+                return recipe;
             }
         }
     }

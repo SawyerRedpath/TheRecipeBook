@@ -1,6 +1,9 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -27,6 +30,20 @@ namespace Application.Recipes
             public string CookTime { get; set; }
         }
 
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.Source).NotEmpty();
+                RuleFor(x => x.Url).NotEmpty();
+                RuleFor(x => x.Notes).NotEmpty();
+                RuleFor(x => x.PrepTime).NotEmpty();
+                RuleFor(x => x.CookTime).NotEmpty();
+            }
+        }
+
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
@@ -39,7 +56,7 @@ namespace Application.Recipes
             {
                 var recipe = await _context.Recipes.FindAsync(request.Id);
 
-                if (recipe == null) throw new Exception("Could not find recipe");
+                if (recipe == null) throw new RestException(HttpStatusCode.NotFound, new { Recipe = "Not found" });
 
                 recipe.Title = request.Title ?? recipe.Title;
                 recipe.Description = request.Description ?? recipe.Description;
