@@ -2,6 +2,7 @@ import React from "react";
 import { Segment, Item, Header, Image, Button } from "semantic-ui-react";
 import { IRecipe } from "../../../app/models/recipe";
 import { observer } from "mobx-react-lite";
+import { Link } from "react-router-dom";
 
 const recipeImageStyle = {
   filter: "brightness(30%)"
@@ -45,7 +46,12 @@ const RecipeDetailedHeader: React.FC<{ recipe: IRecipe }> = ({ recipe }) => {
       </Segment>
       <Segment clearing attached="bottom">
         <Button color="green">Save Recipe</Button>
-        <Button>Cancel</Button>
+        <Button as={Link} to={`/manage/${recipe.id}`} color="orange">
+          Edit Recipe
+        </Button>
+        <Button as={Link} to={"/recipes"}>
+          Cancel
+        </Button>
       </Segment>
     </Segment.Group>
   );

@@ -30,7 +30,12 @@ const RecipeListItem: React.FC<{ recipe: IRecipe }> = ({ recipe }) => {
       <Segment>
         <a
           href="https://www.ruled.me/"
-          style={{ display: "inline-block", width: "50%", textAlign: "center" }}
+          style={{
+            display: "inline-block",
+            width: "50%",
+            textAlign: "center",
+            textDecoration: "underline"
+          }}
         >
           <Icon name="linkify" content={recipe.url}></Icon> Recipe Link
         </a>

@@ -22,7 +22,16 @@ const RecipeDetailedInfo: React.FC<{ recipe: IRecipe }> = ({ recipe }) => {
             <Icon name="linkify" size="large" color="blue" />
           </Grid.Column>
           <Grid.Column width={15}>
-            <span>{recipe.url}</span>
+            <a
+              href="https://www.ruled.me/"
+              style={{
+                display: "inline-block",
+                width: "50%",
+                textDecoration: "underline"
+              }}
+            >
+              <span>{recipe.url}</span>
+            </a>
           </Grid.Column>
         </Grid>
       </Segment>
