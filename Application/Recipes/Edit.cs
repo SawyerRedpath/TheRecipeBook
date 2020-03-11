@@ -28,6 +28,8 @@ namespace Application.Recipes
             public string PrepTime { get; set; }
 
             public string CookTime { get; set; }
+
+            public bool? IsPrivate { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -37,10 +39,9 @@ namespace Application.Recipes
                 RuleFor(x => x.Title).NotEmpty();
                 RuleFor(x => x.Description).NotEmpty();
                 RuleFor(x => x.Source).NotEmpty();
-                RuleFor(x => x.Url).NotEmpty();
-                RuleFor(x => x.Notes).NotEmpty();
                 RuleFor(x => x.PrepTime).NotEmpty();
                 RuleFor(x => x.CookTime).NotEmpty();
+                RuleFor(x => x.IsPrivate).NotEmpty();
             }
         }
 
@@ -65,6 +66,7 @@ namespace Application.Recipes
                 recipe.Notes = request.Notes ?? recipe.Notes;
                 recipe.PrepTime = request.PrepTime ?? recipe.PrepTime;
                 recipe.PrepTime = request.PrepTime ?? recipe.CookTime;
+                recipe.IsPrivate = request.IsPrivate ?? recipe.IsPrivate;
 
                 var success = await _context.SaveChangesAsync() > 0;
 

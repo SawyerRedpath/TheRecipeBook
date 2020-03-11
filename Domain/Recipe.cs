@@ -19,5 +19,7 @@ namespace Domain
         public string PrepTime { get; set; }
 
         public string CookTime { get; set; }
+
+        public bool IsPrivate { get; set; }
     }
 }

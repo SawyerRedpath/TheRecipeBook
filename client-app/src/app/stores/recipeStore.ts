@@ -2,6 +2,8 @@ import { observable, action, computed, configure, runInAction } from "mobx";
 import { createContext, SyntheticEvent } from "react";
 import { IRecipe } from "../models/recipe";
 import agent from "../api/agent";
+import { history } from "../../";
+import { toast } from "react-toastify";
 
 configure({ enforceActions: "always" });
 
@@ -42,14 +44,17 @@ class RecipeStore {
     let recipe = this.getRecipe(id);
     if (recipe) {
       this.recipe = recipe;
+      return recipe;
     } else {
       this.loadingInitial = true;
       try {
         recipe = await agent.Recipes.details(id);
         runInAction("getting Recipe", () => {
           this.recipe = recipe;
+          this.recipeRegistry.set(recipe.id, recipe);
           this.loadingInitial = false;
         });
+        return recipe;
       } catch (error) {
         runInAction("get recipe error", () => {
           this.loadingInitial = false;
@@ -75,11 +80,13 @@ class RecipeStore {
         this.recipeRegistry.set(recipe.id, recipe);
         this.submitting = false;
       });
+      history.push(`/recipes/${recipe.id}`);
     } catch (error) {
       runInAction("creating recipe error", () => {
         this.submitting = false;
       });
-      console.log(error);
+      toast.error("Problem submitting data");
+      console.log(error.response);
     }
   };
 
@@ -92,12 +99,13 @@ class RecipeStore {
         this.recipe = recipe;
         this.submitting = false;
       });
+      history.push(`/recipes/${recipe.id}`);
     } catch (error) {
       runInAction("editing recipe error", () => {
         this.submitting = false;
       });
-
-      console.log(error);
+      toast.error("Problem submitting data");
+      console.log(error.response);
     }
   };
 

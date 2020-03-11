@@ -18,7 +18,8 @@ namespace Persistence
                     Url = "Recipe link",
                     Notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                     PrepTime = "20 minutes",
-                    CookTime = "30 minutes"
+                    CookTime = "30 minutes",
+                    IsPrivate = true
                     },
                     new Recipe {
                     Title = "Recipe 2",
@@ -27,8 +28,8 @@ namespace Persistence
                     Url = "Recipe link",
                     Notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                     PrepTime = "20 minutes",
-                    CookTime = "30 minutes"
-
+                    CookTime = "30 minutes",
+                    IsPrivate = false
                     },
                     new Recipe {
                     Title = "Recipe 3",
@@ -37,8 +38,8 @@ namespace Persistence
                     Url = "Recipe link",
                     Notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                     PrepTime = "20 minutes",
-                    CookTime = "30 minutes"
-
+                    CookTime = "30 minutes",
+                    IsPrivate = false
                     },
                     new Recipe {
                     Title = "Recipe 4",
@@ -47,8 +48,8 @@ namespace Persistence
                     Url = "Recipe link",
                     Notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                     PrepTime = "20 minutes",
-                    CookTime = "30 minutes"
-
+                    CookTime = "30 minutes",
+                    IsPrivate = false
                     },
                     new Recipe {
                     Title = "Recipe 5",
@@ -57,8 +58,8 @@ namespace Persistence
                     Url = "Recipe link",
                     Notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                     PrepTime = "20 minutes",
-                    CookTime = "30 minutes"
-
+                    CookTime = "30 minutes",
+                    IsPrivate = true
                     }
                 };
 
