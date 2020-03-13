@@ -16,25 +16,28 @@ const RecipeDetailedInfo: React.FC<{ recipe: IRecipe }> = ({ recipe }) => {
           </Grid.Column>
         </Grid>
       </Segment>
-      <Segment attached>
-        <Grid verticalAlign="middle">
-          <Grid.Column width={1}>
-            <Icon name="linkify" size="large" color="blue" />
-          </Grid.Column>
-          <Grid.Column width={15}>
-            <a
-              href="https://www.ruled.me/"
-              style={{
-                display: "inline-block",
-                width: "50%",
-                textDecoration: "underline"
-              }}
-            >
-              <span>{recipe.url}</span>
-            </a>
-          </Grid.Column>
-        </Grid>
-      </Segment>
+
+      {recipe.url && (
+        <Segment attached>
+          <Grid verticalAlign="middle">
+            <Grid.Column width={1}>
+              <Icon name="linkify" size="large" color="blue" />
+            </Grid.Column>
+            <Grid.Column width={15}>
+              <a
+                href="https://www.ruled.me/"
+                style={{
+                  display: "inline-block",
+                  width: "50%",
+                  textDecoration: "underline"
+                }}
+              >
+                <span>{recipe.url}</span>
+              </a>
+            </Grid.Column>
+          </Grid>
+        </Segment>
+      )}
       <Segment attached>
         <Grid verticalAlign="middle">
           <Grid.Column width={1}>
@@ -52,16 +55,19 @@ const RecipeDetailedInfo: React.FC<{ recipe: IRecipe }> = ({ recipe }) => {
           </Grid.Column>
         </Grid>
       </Segment>
-      <Segment attached>
-        <Grid verticalAlign="middle">
-          <Grid.Column width={1}>
-            <Icon name="sticky note" size="large" color="blue" />
-          </Grid.Column>
-          <Grid.Column width={11}>
-            <p>{recipe.notes}</p>
-          </Grid.Column>
-        </Grid>
-      </Segment>
+
+      {recipe.notes && (
+        <Segment attached>
+          <Grid verticalAlign="middle">
+            <Grid.Column width={1}>
+              <Icon name="sticky note" size="large" color="blue" />
+            </Grid.Column>
+            <Grid.Column width={11}>
+              <p>{recipe.notes}</p>
+            </Grid.Column>
+          </Grid>
+        </Segment>
+      )}
     </Segment.Group>
   );
 };

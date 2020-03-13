@@ -28,17 +28,23 @@ const RecipeListItem: React.FC<{ recipe: IRecipe }> = ({ recipe }) => {
         </Item.Group>
       </Segment>
       <Segment>
-        <a
-          href="https://www.ruled.me/"
-          style={{
-            display: "inline-block",
-            width: "50%",
-            textAlign: "center",
-            textDecoration: "underline"
-          }}
-        >
-          <Icon name="linkify" content={recipe.url}></Icon> Recipe Link
-        </a>
+        {recipe.url && (
+          <span
+            style={{
+              display: "inline-block",
+              width: "50%",
+              textAlign: "center"
+            }}
+          >
+            <Icon name="linkify" content={recipe.url}></Icon>{" "}
+            <a
+              href="https://www.ruled.me/"
+              style={{ textDecoration: "underline" }}
+            >
+              Recipe Link
+            </a>
+          </span>
+        )}
         <span
           style={{ display: "inline-block", width: "50%", textAlign: "center" }}
         >
