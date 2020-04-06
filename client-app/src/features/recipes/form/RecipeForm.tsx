@@ -1,25 +1,24 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Segment, Form, Button, Grid } from "semantic-ui-react";
-import { RecipeFormValues } from "../../../app/models/recipe";
-import RecipeStore from "../../../app/stores/recipeStore";
-import { observer } from "mobx-react-lite";
-import { RouteComponentProps } from "react-router-dom";
-import { Form as FinalForm, Field } from "react-final-form";
-import TextInput from "../../../app/common/form/TextInput";
-import TextAreaInput from "../../../app/common/form/TextAreaInput";
-import SelectInput from "../../../app/common/form/SelectInput";
-import { publicOrPrivate } from "../../../app/common/options/publicOrPrivateOptions";
-import { v4 as uuid } from "uuid";
-import { combineValidators, isRequired } from "revalidate";
-import { RootStoreContext } from "../../../app/stores/rootStore";
+import React, { useState, useContext, useEffect } from 'react';
+import { Segment, Form, Button, Grid } from 'semantic-ui-react';
+import { RecipeFormValues } from '../../../app/models/recipe';
+import { observer } from 'mobx-react-lite';
+import { RouteComponentProps } from 'react-router-dom';
+import { Form as FinalForm, Field } from 'react-final-form';
+import TextInput from '../../../app/common/form/TextInput';
+import TextAreaInput from '../../../app/common/form/TextAreaInput';
+import SelectInput from '../../../app/common/form/SelectInput';
+import { publicOrPrivate } from '../../../app/common/options/publicOrPrivateOptions';
+import { v4 as uuid } from 'uuid';
+import { combineValidators, isRequired } from 'revalidate';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const validate = combineValidators({
-  title: isRequired({ message: "The recipe title is required" }),
-  description: isRequired({ message: "The recipe description is required" }),
-  source: isRequired({ message: "The recipe source is required" }),
-  cookTime: isRequired({ message: "The recipe cook time is required" }),
-  prepTime: isRequired({ message: "The recipe prep time is required" }),
-  isPrivate: isRequired({ message: "The recipe privacy level is required" })
+  title: isRequired({ message: 'The recipe title is required' }),
+  description: isRequired({ message: 'The recipe description is required' }),
+  source: isRequired({ message: 'The recipe source is required' }),
+  cookTime: isRequired({ message: 'The recipe cook time is required' }),
+  prepTime: isRequired({ message: 'The recipe prep time is required' }),
+  isPrivate: isRequired({ message: 'The recipe privacy level is required' }),
 });
 
 interface DetailParams {
@@ -28,14 +27,14 @@ interface DetailParams {
 
 const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
-  history
+  history,
 }) => {
   const rootStore = useContext(RootStoreContext);
   const {
     createRecipe,
     editRecipe,
     submitting,
-    loadRecipe
+    loadRecipe,
   } = rootStore.recipeStore;
 
   const [recipe, setRecipe] = useState(new RecipeFormValues());
@@ -45,7 +44,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
     if (match.params.id) {
       setLoading(true);
       loadRecipe(match.params.id)
-        .then(recipe => setRecipe(new RecipeFormValues(recipe)))
+        .then((recipe) => setRecipe(new RecipeFormValues(recipe)))
         .finally(() => setLoading(false));
     }
   }, [loadRecipe, match.params.id]);
@@ -55,7 +54,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
     if (!recipe.id) {
       let newRecipe = {
         ...recipe,
-        id: uuid()
+        id: uuid(),
       };
       createRecipe(newRecipe);
     } else {
@@ -74,7 +73,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
             render={({ handleSubmit, invalid, pristine }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
                 <Form.Field>
-                  <label style={{ marginLeft: "0.7rem" }}>Title</label>
+                  <label style={{ marginLeft: '0.7rem' }}>Title</label>
                   <Field
                     name="title"
                     placeholder="Delicious Mexican Salad"
@@ -83,7 +82,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   />
                 </Form.Field>
                 <Form.Field>
-                  <label style={{ marginLeft: "0.7rem" }}>Description</label>
+                  <label style={{ marginLeft: '0.7rem' }}>Description</label>
                   <Field
                     name="description"
                     placeholder="A very yummy salad good for..."
@@ -93,7 +92,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   />
                 </Form.Field>
                 <Form.Field>
-                  <label style={{ marginLeft: "0.7rem" }}>Recipe Source</label>
+                  <label style={{ marginLeft: '0.7rem' }}>Recipe Source</label>
                   <Field
                     name="source"
                     placeholder="Martha Stewart Cook Book"
@@ -102,7 +101,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   />
                 </Form.Field>
                 <Form.Field>
-                  <label style={{ marginLeft: "0.7rem" }}>
+                  <label style={{ marginLeft: '0.7rem' }}>
                     URL to Recipe (optional)
                   </label>
                   <Field
@@ -113,7 +112,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   />
                 </Form.Field>
                 <Form.Field>
-                  <label style={{ marginLeft: "0.7rem" }}>
+                  <label style={{ marginLeft: '0.7rem' }}>
                     Notes (optional)
                   </label>
                   <Field
@@ -124,7 +123,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   />
                 </Form.Field>
                 <Form.Field>
-                  <label style={{ marginLeft: "0.7rem" }}>Prep Time</label>
+                  <label style={{ marginLeft: '0.7rem' }}>Prep Time</label>
                   <Field
                     name="prepTime"
                     placeholder="30 minutes"
@@ -133,7 +132,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   />
                 </Form.Field>
                 <Form.Field>
-                  <label style={{ marginLeft: "0.7rem" }}>Cook Time</label>
+                  <label style={{ marginLeft: '0.7rem' }}>Cook Time</label>
                   <Field
                     name="cookTime"
                     placeholder="5 minutes"
@@ -142,7 +141,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   />
                 </Form.Field>
                 <Form.Field>
-                  <label style={{ marginLeft: "0.7rem" }}>Privacy Level</label>
+                  <label style={{ marginLeft: '0.7rem' }}>Privacy Level</label>
                   <Field
                     name="isPrivate"
                     options={publicOrPrivate}
@@ -163,7 +162,7 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   onClick={
                     recipe.id
                       ? () => history.push(`/recipes/${recipe.id}`)
-                      : () => history.push("/recipes")
+                      : () => history.push('/recipes')
                   }
                   disabled={loading}
                   floated="right"
