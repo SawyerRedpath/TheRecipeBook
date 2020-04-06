@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { IRecipe } from "../models/recipe";
 import { history } from "../..";
 import { toast } from "react-toastify";
+import { IUser, IUserFormValues } from "../models/user";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
@@ -23,7 +24,7 @@ axios.interceptors.response.use(undefined, error => {
   if (status === 500) {
     toast.error("Server error - check the terminal for more info!");
   }
-  throw error;
+  throw error.response;
 });
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -65,6 +66,15 @@ const Recipes = {
   delete: (id: string) => requests.del(`/recipes/${id}`)
 };
 
+const User = {
+  currentUser: (): Promise<IUser> => requests.get("/user"),
+  login: (user: IUserFormValues): Promise<IUser> =>
+    requests.post(`/user/login`, user),
+  register: (user: IUserFormValues): Promise<IUser> =>
+    requests.post(`/user/register`, user)
+};
+
 export default {
-  Recipes
+  Recipes,
+  User
 };

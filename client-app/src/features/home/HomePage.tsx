@@ -17,8 +17,8 @@ const HomePage = () => {
             The Recipe Book
           </Header>
           <Header as="h2" inverted content="Welcome to The Recipe Book" />
-          <Button as={Link} to="/recipes" size="huge" inverted>
-            Take me to the recipes!
+          <Button as={Link} to="/login" size="huge" inverted>
+            Login
           </Button>
         </Container>
       </Segment>

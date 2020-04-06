@@ -1,13 +1,17 @@
-import { observable, action, computed, configure, runInAction } from "mobx";
-import { createContext, SyntheticEvent } from "react";
+import { observable, action, computed, runInAction } from "mobx";
+import { SyntheticEvent } from "react";
 import { IRecipe } from "../models/recipe";
 import agent from "../api/agent";
 import { history } from "../../";
 import { toast } from "react-toastify";
+import { RootStore } from "./rootStore";
 
-configure({ enforceActions: "always" });
+export default class RecipeStore {
+  rootStore: RootStore;
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+  }
 
-class RecipeStore {
   @observable recipeRegistry = new Map();
   @observable recipe: IRecipe | null = null;
   @observable loadingInitial = false;
@@ -132,5 +136,3 @@ class RecipeStore {
     }
   };
 }
-
-export default createContext(new RecipeStore());

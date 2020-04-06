@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { Item } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
-import RecipeStore from "../../../app/stores/recipeStore";
 import RecipeListItem from "./RecipeListItem";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const RecipeList: React.FC = () => {
-  const recipeStore = useContext(RecipeStore);
-  const { recipesByTitle } = recipeStore;
+  const rootStore = useContext(RootStoreContext);
+  const { recipesByTitle } = rootStore.recipeStore;
   return (
     <Item.Group divided>
       {recipesByTitle.map(recipe => (

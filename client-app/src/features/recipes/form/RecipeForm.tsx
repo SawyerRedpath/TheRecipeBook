@@ -11,6 +11,7 @@ import SelectInput from "../../../app/common/form/SelectInput";
 import { publicOrPrivate } from "../../../app/common/options/publicOrPrivateOptions";
 import { v4 as uuid } from "uuid";
 import { combineValidators, isRequired } from "revalidate";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const validate = combineValidators({
   title: isRequired({ message: "The recipe title is required" }),
@@ -29,8 +30,13 @@ const RecipeForm: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history
 }) => {
-  const recipeStore = useContext(RecipeStore);
-  const { createRecipe, editRecipe, submitting, loadRecipe } = recipeStore;
+  const rootStore = useContext(RootStoreContext);
+  const {
+    createRecipe,
+    editRecipe,
+    submitting,
+    loadRecipe
+  } = rootStore.recipeStore;
 
   const [recipe, setRecipe] = useState(new RecipeFormValues());
   const [loading, setLoading] = useState(false);

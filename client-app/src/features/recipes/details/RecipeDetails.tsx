@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import RecipeStore from "../../../app/stores/recipeStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
@@ -8,6 +7,7 @@ import RecipeDetailedHeader from "./RecipeDetailedHeader";
 import RecipeDetailedInfo from "./RecipeDetailedInfo";
 import RecipeDetailedChat from "./RecipeDetailedChat";
 import RecipeDetailedSidebar from "./RecipeDetailedSidebar";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 interface DetailParams {
   id: string;
@@ -17,8 +17,8 @@ const RecipeDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history
 }) => {
-  const recipeStore = useContext(RecipeStore);
-  const { recipe, loadRecipe, loadingInitial } = recipeStore;
+  const rootStore = useContext(RootStoreContext);
+  const { recipe, loadRecipe, loadingInitial } = rootStore.recipeStore;
 
   useEffect(() => {
     loadRecipe(match.params.id);

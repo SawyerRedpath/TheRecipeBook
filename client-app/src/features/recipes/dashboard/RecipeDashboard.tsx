@@ -2,18 +2,18 @@ import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
 import RecipeList from "../dashboard/RecipeList";
 import { observer } from "mobx-react-lite";
-import RecipeStore from "../../../app/stores/recipeStore";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const RecipeDashboard: React.FC = () => {
-  const recipeStore = useContext(RecipeStore);
+  const rootStore = useContext(RootStoreContext);
+  const { loadRecipes, loadingInitial } = rootStore.recipeStore;
 
   useEffect(() => {
-    recipeStore.loadRecipes();
-  }, [recipeStore]);
+    loadRecipes();
+  }, [loadRecipes]);
 
-  if (recipeStore.loadingInitial)
-    return <LoadingComponent content="Loading recipes.." />;
+  if (loadingInitial) return <LoadingComponent content="Loading recipes.." />;
   return (
     <Grid>
       <Grid.Column width={10}>

@@ -14,6 +14,7 @@ import HomePage from "../../features/home/HomePage";
 import RecipeForm from "../../features/recipes/form/RecipeForm";
 import RecipeDetails from "../../features/recipes/details/RecipeDetails";
 import NotFound from "./NotFound";
+import LoginForm from "../../features/user/LoginForm";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   return (
@@ -34,6 +35,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                   path={["/createRecipe", "/manage/:id"]}
                   component={RecipeForm}
                 />
+                <Route path="/login" component={LoginForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
