@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace Domain
-{
-    public class Recipe
-    {
+namespace Application.Recipes {
+    public class RecipeDto {
         public Guid Id { get; set; }
 
         public string Title { get; set; }
@@ -23,6 +22,7 @@ namespace Domain
 
         public bool IsPrivate { get; set; }
 
-        public virtual ICollection<UserRecipe> UserRecipes { get; set; }
+        [JsonPropertyName ("followers")]
+        public ICollection<FollowerDto> UserRecipes { get; set; }
     }
 }

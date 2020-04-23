@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,22 +11,25 @@ namespace Application.Recipes.List
 {
     public class List
     {
-        public class Query : IRequest<List<Recipe>> { }
+        public class Query : IRequest<List<RecipeDto>> { }
 
-        public class Handler : IRequestHandler<Query, List<Recipe>>
+        public class Handler : IRequestHandler<Query, List<RecipeDto>>
         {
             private readonly DataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler (DataContext context)
+            public Handler(DataContext context, IMapper mapper)
             {
+                _mapper = mapper;
                 _context = context;
             }
 
-            public async Task<List<Recipe>> Handle (Query request, CancellationToken cancellationToken)
+            public async Task<List<RecipeDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var recipes = await _context.Recipes.ToListAsync ();
+                var recipes = await _context.Recipes
+                    .ToListAsync();
 
-                return recipes;
+                return _mapper.Map<List<Recipe>, List<RecipeDto>>(recipes);
             }
         }
     }
