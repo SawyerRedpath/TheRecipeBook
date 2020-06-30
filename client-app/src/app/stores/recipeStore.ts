@@ -1,10 +1,11 @@
-import { observable, action, computed, runInAction } from "mobx";
-import { SyntheticEvent } from "react";
-import { IRecipe } from "../models/recipe";
-import agent from "../api/agent";
-import { history } from "../../";
-import { toast } from "react-toastify";
-import { RootStore } from "./rootStore";
+import { observable, action, computed, runInAction } from 'mobx';
+import { SyntheticEvent } from 'react';
+import { IRecipe } from '../models/recipe';
+import agent from '../api/agent';
+import { history } from '../../';
+import { toast } from 'react-toastify';
+import { RootStore } from './rootStore';
+import { setRecipeProps, createFollower } from '../common/utility/util';
 
 export default class RecipeStore {
   rootStore: RootStore;
@@ -16,7 +17,8 @@ export default class RecipeStore {
   @observable recipe: IRecipe | null = null;
   @observable loadingInitial = false;
   @observable submitting = false;
-  @observable target = "";
+  @observable target = '';
+  @observable loading = false;
 
   @computed get recipesByTitle() {
     return Array.from(this.recipeRegistry.values()).sort((a, b) => {
@@ -30,14 +32,15 @@ export default class RecipeStore {
     this.loadingInitial = true;
     try {
       const recipes = await agent.Recipes.list();
-      runInAction("loading recipes", () => {
-        recipes.forEach(recipe => {
+      runInAction('loading recipes', () => {
+        recipes.forEach((recipe) => {
+          setRecipeProps(recipe, this.rootStore.userStore.user!);
           this.recipeRegistry.set(recipe.id, recipe);
         });
         this.loadingInitial = false;
       });
     } catch (error) {
-      runInAction("loading recipes error", () => {
+      runInAction('loading recipes error', () => {
         this.loadingInitial = false;
       });
       console.log(error);
@@ -53,14 +56,15 @@ export default class RecipeStore {
       this.loadingInitial = true;
       try {
         recipe = await agent.Recipes.details(id);
-        runInAction("getting Recipe", () => {
+        runInAction('getting Recipe', () => {
+          setRecipeProps(recipe, this.rootStore.userStore.user!);
           this.recipe = recipe;
           this.recipeRegistry.set(recipe.id, recipe);
           this.loadingInitial = false;
         });
         return recipe;
       } catch (error) {
-        runInAction("get recipe error", () => {
+        runInAction('get recipe error', () => {
           this.loadingInitial = false;
         });
         console.log(error);
@@ -80,16 +84,16 @@ export default class RecipeStore {
     this.submitting = true;
     try {
       await agent.Recipes.create(recipe);
-      runInAction("creating recipe", () => {
+      runInAction('creating recipe', () => {
         this.recipeRegistry.set(recipe.id, recipe);
         this.submitting = false;
       });
       history.push(`/recipes/${recipe.id}`);
     } catch (error) {
-      runInAction("creating recipe error", () => {
+      runInAction('creating recipe error', () => {
         this.submitting = false;
       });
-      toast.error("Problem submitting data");
+      toast.error('Problem submitting data');
       console.log(error.response);
     }
   };
@@ -98,17 +102,17 @@ export default class RecipeStore {
     this.submitting = true;
     try {
       await agent.Recipes.update(recipe);
-      runInAction("editing recipe", () => {
+      runInAction('editing recipe', () => {
         this.recipeRegistry.set(recipe.id, recipe);
         this.recipe = recipe;
         this.submitting = false;
       });
       history.push(`/recipes/${recipe.id}`);
     } catch (error) {
-      runInAction("editing recipe error", () => {
+      runInAction('editing recipe error', () => {
         this.submitting = false;
       });
-      toast.error("Problem submitting data");
+      toast.error('Problem submitting data');
       console.log(error.response);
     }
   };
@@ -121,18 +125,61 @@ export default class RecipeStore {
     this.target = event.currentTarget.name;
     try {
       await agent.Recipes.delete(id);
-      runInAction("deleting recipe", () => {
+      runInAction('deleting recipe', () => {
         this.recipeRegistry.delete(id);
         this.submitting = false;
-        this.target = "";
+        this.target = '';
       });
     } catch (error) {
-      runInAction("deleting recipe error", () => {
+      runInAction('deleting recipe error', () => {
         this.submitting = false;
-        this.target = "";
+        this.target = '';
       });
 
       console.log(error);
+    }
+  };
+
+  @action followRecipe = async () => {
+    const follower = createFollower(this.rootStore.userStore.user!);
+    this.loading = true;
+    try {
+      await agent.Recipes.follow(this.recipe!.id);
+      runInAction(() => {
+        if (this.recipe) {
+          this.recipe.followers.push(follower);
+          this.recipe.isFollowing = true;
+          this.recipeRegistry.set(this.recipe.id, this.recipe);
+          this.loading = false;
+        }
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.loading = false;
+      });
+      toast.error('Problem following recipe');
+    }
+  };
+
+  @action unfollowRecipe = async () => {
+    this.loading = true;
+    try {
+      await agent.Recipes.unfollow(this.recipe!.id);
+      runInAction(() => {
+        if (this.recipe) {
+          this.recipe.followers = this.recipe.followers.filter(
+            (f) => f.username !== this.rootStore.userStore.user!.username
+          );
+          this.recipe.isFollowing = false;
+          this.recipeRegistry.set(this.recipe.id, this.recipe);
+          this.loading = false;
+        }
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.loading = false;
+      });
+      toast.error('Problem unfollowing recipe');
     }
   };
 }

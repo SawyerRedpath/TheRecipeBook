@@ -61,6 +61,8 @@ const Recipes = {
   create: (recipe: IRecipe) => requests.post('/recipes', recipe),
   update: (recipe: IRecipe) => requests.put(`/recipes/${recipe.id}`, recipe),
   delete: (id: string) => requests.del(`/recipes/${id}`),
+  follow: (id: string) => requests.post(`/recipes/${id}/follow`, {}),
+  unfollow: (id: string) => requests.del(`/recipes/${id}/follow`),
 };
 
 const User = {

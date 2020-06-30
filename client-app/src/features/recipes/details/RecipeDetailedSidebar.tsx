@@ -1,52 +1,56 @@
-import React from "react";
-import { Segment, Image, Item, List, Label } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Segment, Image, Item, List, Label } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { IFollower } from '../../../app/models/recipe';
+import { observer } from 'mobx-react-lite';
 
-const RecipeDetailedSidebar = () => {
+interface IProps {
+  followers: IFollower[];
+}
+
+const RecipeDetailedSidebar: React.FC<IProps> = ({ followers }) => {
+  const isHost = false;
   return (
     <>
       <Segment
         textAlign="center"
-        style={{ border: "none" }}
+        style={{ border: 'none' }}
         attached="top"
         secondary
         inverted
         color="blue"
       >
-        3 friends saved this recipe
+        {followers.length} {followers.length === 1 ? 'person' : 'people'}{' '}
+        following this recipe
       </Segment>
       <Segment attached>
         <List relaxed divided>
-          <Item style={{ position: "relative" }}>
-            <Label
-              style={{ position: "absolute" }}
-              color="orange"
-              ribbon="right"
-            >
-              Poster
-            </Label>
-            <Image size="tiny" src={"/assets/user.png"} />
-            <Item.Content verticalAlign="middle">
-              <Item.Header as="h3">
-                <Link to={`#`}>Bob</Link>
-              </Item.Header>
-              <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
-            </Item.Content>
-          </Item>
-
-          <Item style={{ position: "relative" }}>
-            <Image size="tiny" src={"/assets/user.png"} />
-            <Item.Content verticalAlign="middle">
-              <Item.Header as="h3">
-                <Link to={`#`}>Tom</Link>
-              </Item.Header>
-              <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
-            </Item.Content>
-          </Item>
+          {followers.map((follower) => (
+            <Item key={follower.username} style={{ position: 'relative' }}>
+              {isHost && (
+                <Label
+                  style={{ position: 'absolute' }}
+                  color="orange"
+                  ribbon="right"
+                >
+                  Recipe poster
+                </Label>
+              )}
+              <Image size="tiny" src={follower.image || '/assets/user.png'} />
+              <Item.Content verticalAlign="middle">
+                <Item.Header as="h3">
+                  <Link to={`/profile/${follower.username}`}>
+                    {follower.displayName}
+                  </Link>
+                </Item.Header>
+                <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>
+              </Item.Content>
+            </Item>
+          ))}
         </List>
       </Segment>
     </>
   );
 };
 
-export default RecipeDetailedSidebar;
+export default observer(RecipeDetailedSidebar);

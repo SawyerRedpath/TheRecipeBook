@@ -8,19 +8,22 @@ export interface IRecipe {
   prepTime: string;
   cookTime: string;
   isPrivate: boolean;
+  isFollowing: boolean;
+  isCreator: boolean;
+  followers: IFollower[];
 }
 
 export interface IRecipeFormValues extends Partial<IRecipe> {}
 
 export class RecipeFormValues implements IRecipeFormValues {
   id?: string = undefined;
-  title: string = "";
-  description: string = "";
-  source: string = "";
-  url: string = "";
-  notes: string = "";
-  prepTime: string = "";
-  cookTime: string = "";
+  title: string = '';
+  description: string = '';
+  source: string = '';
+  url: string = '';
+  notes: string = '';
+  prepTime: string = '';
+  cookTime: string = '';
   isPrivate: boolean = false;
 
   /**
@@ -29,4 +32,11 @@ export class RecipeFormValues implements IRecipeFormValues {
   constructor(init?: IRecipeFormValues) {
     Object.assign(this, init);
   }
+}
+
+export interface IFollower {
+  username: string;
+  displayName: string;
+  image: string;
+  isCreator: boolean;
 }

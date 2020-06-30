@@ -1,13 +1,13 @@
-import React, { useContext, useEffect } from "react";
-import { Grid } from "semantic-ui-react";
-import { observer } from "mobx-react-lite";
-import { RouteComponentProps } from "react-router-dom";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
-import RecipeDetailedHeader from "./RecipeDetailedHeader";
-import RecipeDetailedInfo from "./RecipeDetailedInfo";
-import RecipeDetailedChat from "./RecipeDetailedChat";
-import RecipeDetailedSidebar from "./RecipeDetailedSidebar";
-import { RootStoreContext } from "../../../app/stores/rootStore";
+import React, { useContext, useEffect } from 'react';
+import { Grid } from 'semantic-ui-react';
+import { observer } from 'mobx-react-lite';
+import { RouteComponentProps } from 'react-router-dom';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import RecipeDetailedHeader from './RecipeDetailedHeader';
+import RecipeDetailedInfo from './RecipeDetailedInfo';
+import RecipeDetailedChat from './RecipeDetailedChat';
+import RecipeDetailedSidebar from './RecipeDetailedSidebar';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 interface DetailParams {
   id: string;
@@ -15,7 +15,7 @@ interface DetailParams {
 
 const RecipeDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
-  history
+  history,
 }) => {
   const rootStore = useContext(RootStoreContext);
   const { recipe, loadRecipe, loadingInitial } = rootStore.recipeStore;
@@ -36,7 +36,7 @@ const RecipeDetails: React.FC<RouteComponentProps<DetailParams>> = ({
         <RecipeDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <RecipeDetailedSidebar />
+        <RecipeDetailedSidebar followers={recipe.followers} />
       </Grid.Column>
     </Grid>
   );
